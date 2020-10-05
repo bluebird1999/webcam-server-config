@@ -21,6 +21,7 @@
 #define 	CONFIG_VIDEO_OSD_PATH					"/opt/qcy/config/video_osd.config"
 #define 	CONFIG_VIDEO_3ACTRL_PATH				"/opt/qcy/config/video_3actrl.config"
 #define 	CONFIG_VIDEO_JPG_PATH					"/opt/qcy/config/video_jpg.config"
+#define 	CONFIG_VIDEO_MD_PATH					"/opt/qcy/config/video_md.config"
 
 /*
  * structure

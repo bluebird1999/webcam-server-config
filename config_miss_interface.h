@@ -28,6 +28,7 @@
 typedef struct miss_profile_t {
 	char 	did[MAX_SYSTEM_STRING_SIZE];
 	char 	key[MAX_SYSTEM_STRING_SIZE];
+	char 	mac[MAX_SYSTEM_STRING_SIZE];
 	char 	model[MAX_SYSTEM_STRING_SIZE];
 	char 	sdk_type[MAX_SYSTEM_STRING_SIZE];
 	char 	token[2*MAX_SYSTEM_STRING_SIZE];

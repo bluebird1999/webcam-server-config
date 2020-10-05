@@ -277,7 +277,6 @@ static int server_message_proc(void)
 	int ret = 0, ret1 = 0;
 	message_t msg;
 	message_t send_msg;
-	message_arg_t *rd;
 	msg_init(&msg);
 	msg_init(&send_msg);
 	ret = pthread_rwlock_wrlock(&message.lock);
@@ -312,10 +311,10 @@ static int server_message_proc(void)
 		ret = server_set_config(msg.sender, msg.arg_in.cat, msg.arg );
 		break;
 	case MSG_CONFIG_READ_STATUS:
-		rd = (message_arg_t*)msg.arg;
-		ret = server_get_config_status( rd->dog, rd->cat );
+		ret = server_get_config_status( msg.sender, msg.arg_in.cat );
 		send_msg.message = MSG_CONFIG_READ_STATUS_ACK;
-		send_msg.result = ret;
+		send_msg.result = 0;
+		send_msg.arg_in.cat = ret;
 		server_dispatch_message(&send_msg, msg.sender);
 		break;
 	case MSG_MANAGER_TIMER_ACK:

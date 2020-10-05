@@ -29,7 +29,7 @@ typedef struct miio_config_device_t {
 	char vendor[MAX_SYSTEM_STRING_SIZE];
 	char mac[MAX_SYSTEM_STRING_SIZE];
 	char model[MAX_SYSTEM_STRING_SIZE];
-	char version[MAX_SYSTEM_STRING_SIZE];
+	char version[MAX_SYSTEM_STRING_SIZE];		//linux
 	char miio_token[2*MAX_SYSTEM_STRING_SIZE];
 } miio_config_device_t;
 

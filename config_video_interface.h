@@ -20,13 +20,15 @@
 /*
  * define
  */
-#define		CONFIG_VIDEO_MODULE_NUM			6
+#define		CONFIG_VIDEO_MODULE_NUM			7
+
 #define		CONFIG_VIDEO_PROFILE			0
 #define		CONFIG_VIDEO_ISP				1
 #define		CONFIG_VIDEO_H264				2
 #define		CONFIG_VIDEO_OSD				3
 #define		CONFIG_VIDEO_3ACTRL				4
 #define		CONFIG_VIDEO_JPG				5
+#define		CONFIG_VIDEO_MD					6
 
 #define		AE_AUTO_MODE_NONE				0
 #define		AE_AUTO_MODE_TARGET_DELTA		1
@@ -154,6 +156,17 @@ typedef struct video_jpg_config_t {
 	struct rts_jpgenc_attr		jpg_ctrl;
 } video_jpg_config_t;
 
+typedef struct video_md_config_t {
+	int 	enable;
+	int		polling;
+	int		trig;
+	int		cloud_report;
+	int		alarm_interval;
+	int		sensitivity;
+	char	start[MAX_SYSTEM_STRING_SIZE];
+	char	end[MAX_SYSTEM_STRING_SIZE];
+} video_md_config_t;
+
 typedef struct video_config_t {
 	int							status;
 	video_profile_config_t		profile;
@@ -162,24 +175,9 @@ typedef struct video_config_t {
 	video_osd_config_t 			osd;
 	video_3actrl_config_t		a3ctrl;
 	video_jpg_config_t			jpg;
+	video_md_config_t			md;
 } video_config_t;
 
-typedef struct video_miio_config_t {
-	int 	on;
-	int		image_roll;
-	int		night;
-	int		watermark;
-	int		wdr;
-	int		glimmer;
-	int		recording;
-	int		motion;
-	int		motion_switch;
-	int		motion_alarm;
-	int		motion_sensitivity;
-	int		motion_start;
-	int		motion_end;
-	int		custom_distortion;
-} video_miio_config_t;
 /*
  * function
  */

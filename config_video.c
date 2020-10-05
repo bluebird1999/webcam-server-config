@@ -64,7 +64,7 @@ static config_map_t video_config_isp_map[] = {
     {"wdr_mode",				&(video_config.isp.wdr_mode),				cfg_u32, 0,0,0,2,},
 	{"wdr_level",				&(video_config.isp.wdr_level),				cfg_u32, 0,0,0,100,},
     {"ir_mode", 				&(video_config.isp.ir_mode), 				cfg_u32, 0,0,0,2,},
-    {"smart_ir_mode",			&(video_config.isp.smart_ir_mode),			cfg_u32, 2,0,0,4,},
+    {"smart_ir_mode",			&(video_config.isp.smart_ir_mode),			cfg_u32, 0,0,0,4,},
 	{"smart_ir_manual_level",	&(video_config.isp.smart_ir_manual_level),	cfg_u32, 50,0,0,100,},
     {"ldc", 					&(video_config.isp.ldc), 					cfg_u32, 0,0,0,1,},
     {"noise_reduction",			&(video_config.isp.noise_reduction),		cfg_u32, 4,0,1,7,},
@@ -180,6 +180,18 @@ static config_map_t video_config_jpg_map[] = {
     {NULL,},
 };
 
+static config_map_t video_config_md_map[] = {
+    {"enable", 			&(video_config.md.enable), 				cfg_u32, 1,0,0,1,},
+	{"polling",			&(video_config.md.polling),				cfg_u32, 1,0,0,1,},
+	{"trig",			&(video_config.md.trig),				cfg_u32, 1,0,0,1,},
+    {"cloud_report",	&(video_config.md.cloud_report),		cfg_u32, 1,0,0,1,},
+    {"alarm_interval", 	&(video_config.md.alarm_interval), 		cfg_u32, 1,0,1,30,},
+    {"sensitivity",		&(video_config.md.sensitivity),			cfg_u32, 30,0,0,100,},
+    {"start", 			&(video_config.md.start), 				cfg_string, '20:00-23:00',0, 0,32,},
+    {"end",				&(video_config.md.end),					cfg_string, '20:00-23:00',0, 0,32,},
+    {NULL,},
+};
+
 //function
 static int video_config_save(void);
 
@@ -208,35 +220,35 @@ static int video_config_save(void)
 		if(!ret)
 			misc_set_bit(&dirty, CONFIG_VIDEO_PROFILE, 0);
 	}
-	else if( misc_get_bit(dirty, CONFIG_VIDEO_ISP) )
-	{
+	else if( misc_get_bit(dirty, CONFIG_VIDEO_ISP) ) {
 		ret = write_config_file(&video_config_isp_map, CONFIG_VIDEO_ISP_PATH);
 		if(!ret)
 			misc_set_bit(&dirty, CONFIG_VIDEO_ISP, 0);
 	}
-	else if( misc_get_bit(dirty, CONFIG_VIDEO_H264) )
-	{
+	else if( misc_get_bit(dirty, CONFIG_VIDEO_H264) ) {
 		ret = write_config_file(&video_config_h264_map, CONFIG_VIDEO_H264_PATH);
 		if(!ret)
 			misc_set_bit(&dirty, CONFIG_VIDEO_H264, 0);
 	}
-	else if( misc_get_bit(dirty, CONFIG_VIDEO_OSD) )
-	{
+	else if( misc_get_bit(dirty, CONFIG_VIDEO_OSD) ) {
 		ret = write_config_file(&video_config_osd_map, CONFIG_VIDEO_OSD_PATH);
 		if(!ret)
 			misc_set_bit(&dirty, CONFIG_VIDEO_OSD, 0);
 	}
-	else if( misc_get_bit(dirty, CONFIG_VIDEO_3ACTRL) )
-	{
+	else if( misc_get_bit(dirty, CONFIG_VIDEO_3ACTRL) ) {
 		ret = write_config_file(&video_config_3actrl_map, CONFIG_VIDEO_3ACTRL_PATH);
 		if(!ret)
 			misc_set_bit(&dirty, CONFIG_VIDEO_3ACTRL, 0);
 	}
-	else if( misc_get_bit(dirty, CONFIG_VIDEO_JPG) )
-	{
+	else if( misc_get_bit(dirty, CONFIG_VIDEO_JPG) ) {
 		ret = write_config_file(&video_config_jpg_map, CONFIG_VIDEO_JPG_PATH);
 		if(!ret)
 			misc_set_bit(&dirty, CONFIG_VIDEO_JPG, 0);
+	}
+	else if( misc_get_bit(dirty, CONFIG_VIDEO_MD) ) {
+		ret = write_config_file(&video_config_md_map, CONFIG_VIDEO_MD_PATH);
+		if(!ret)
+			misc_set_bit(&dirty, CONFIG_VIDEO_MD, 0);
 	}
 	if( !dirty ) {
 		/********message body********/
@@ -302,6 +314,13 @@ int config_video_read(void)
 		misc_set_bit(&video_config.status, CONFIG_VIDEO_JPG,1);
 	else
 		misc_set_bit(&video_config.status, CONFIG_VIDEO_JPG,0);
+	ret1 |= ret;
+
+	ret = read_config_file(&video_config_md_map, CONFIG_VIDEO_MD_PATH);
+	if(!ret)
+		misc_set_bit(&video_config.status, CONFIG_VIDEO_MD,1);
+	else
+		misc_set_bit(&video_config.status, CONFIG_VIDEO_MD,0);
 	ret1 |= ret;
 	ret = pthread_rwlock_unlock(&lock);
 	if (ret)
@@ -370,6 +389,9 @@ int config_video_set(int module, void* arg)
 	}
 	else if ( module == CONFIG_VIDEO_JPG ) {
 		memcpy( (video_jpg_config_t*)(&video_config.jpg), arg, sizeof(video_jpg_config_t));
+	}
+	else if ( module == CONFIG_VIDEO_MD ) {
+		memcpy( (video_md_config_t*)(&video_config.md), arg, sizeof(video_md_config_t));
 	}
 	ret = pthread_rwlock_unlock(&lock);
 	if (ret)

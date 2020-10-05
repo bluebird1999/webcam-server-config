@@ -120,8 +120,10 @@ static int miss_config_device_read(void)
     	char *ptr_did = 0;
     	char *ptr_key = 0;
     	char *ptr_model = 0;
+    	char *ptr_mac = 0;
     	ptr_did = strstr(data, "did=");
     	ptr_key = strstr(data, "key=");
+    	ptr_mac = strstr(data, "mac=");
     	ptr_model = strstr(data, "model=");
     	char *p,*m;
     	if(ptr_did&&ptr_key) {
@@ -129,6 +131,8 @@ static int miss_config_device_read(void)
     		memcpy(miss_config.profile.did,ptr_did+4,len);
     		len = 16;//key length
     		memcpy(miss_config.profile.key,ptr_key+4,len);
+    		len = 17;//mac length
+    		memcpy(miss_config.profile.mac,ptr_mac+4,len);
     		p = ptr_model+6; m = miss_config.profile.model;
     		while(*p!='\n' && *p!='\0') {
     			memcpy(m, p, 1);
