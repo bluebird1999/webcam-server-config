@@ -263,7 +263,7 @@ static int server_dispatch_message(message_t *msg, int target)
 		st = server_audio_message(msg);
 		break;
 	case SERVER_RECORDER:
-//		st = server_recorder_message(msg);
+		st = server_recorder_message(msg);
 		break;
 	case SERVER_PLAYER:
 //		st = server_player_message(msg);

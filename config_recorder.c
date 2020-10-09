@@ -27,8 +27,20 @@
 static pthread_rwlock_t			lock;
 static int						dirty;
 static recorder_config_t		recorder_config;
-static config_map_t recorder_config_map[] = {
-	{"max_length",      &(recorder_config.profile.max_length),      cfg_u32, 600,0,0,3600,  	},
+static config_map_t recorder_config_profile_map[] = {
+	{"enable",     			&(recorder_config.profile.enable),      				cfg_u32, 	0,0,0,1,  	},
+	{"low_bitrate",     	&(recorder_config.profile.quality[0].bitrate),      	cfg_u32, 	512,0,0,10000,  	},
+	{"low_audio_sample",	&(recorder_config.profile.quality[0].audio_sample),		cfg_u32, 	8,0,0,1000000,},
+	{"medium_bitrate",     	&(recorder_config.profile.quality[1].bitrate),      	cfg_u32, 	1024,0,0,10000,  	},
+	{"medium_audio_sample",	&(recorder_config.profile.quality[1].audio_sample),		cfg_u32, 	8,0,0,1000000,},
+	{"high_bitrate",     	&(recorder_config.profile.quality[2].bitrate),      	cfg_u32, 	2048,0,0,10000,  	},
+	{"high_audio_sample",	&(recorder_config.profile.quality[2].audio_sample),		cfg_u32, 	8,0,0,1000000,},
+	{"max_length",      	&(recorder_config.profile.max_length),      cfg_u32, 	600,0,0,36000,},
+	{"min_length",      	&(recorder_config.profile.min_length),      cfg_u32, 	3,0,0,36000,},
+	{"directory",      		&(recorder_config.profile.directory),       cfg_string, "/mnt/sd/",0,0,32,},
+	{"normal_prefix",      	&(recorder_config.profile.normal_prefix),   cfg_string, "normal",0,0,32,},
+	{"motion_prefix", 		&(recorder_config.profile.motion_prefix),   cfg_string, "motion",0,0,32,},
+	{"alarm_prefix",      	&(recorder_config.profile.alarm_prefix),   	cfg_string, "alarm",0,0,32,},
     {NULL,},
 };
 //function
@@ -55,7 +67,7 @@ static int recorder_config_save(void)
 		return ret;
 	}
 	if( misc_get_bit(dirty, CONFIG_RECORDER_PROFILE) ) {
-		ret = write_config_file(&recorder_config_map, CONFIG_RECORDER_PROFILE_PATH);
+		ret = write_config_file(&recorder_config_profile_map, CONFIG_RECORDER_PROFILE_PATH);
 		if(!ret)
 			misc_set_bit(&dirty, CONFIG_RECORDER_PROFILE, 0);
 	}
@@ -83,7 +95,7 @@ int config_recorder_read(void)
 		log_err("add lock fail, ret = %d\n", ret);
 		return ret;
 	}
-	ret = read_config_file(&recorder_config_map, CONFIG_RECORDER_PROFILE_PATH);
+	ret = read_config_file(&recorder_config_profile_map, CONFIG_RECORDER_PROFILE_PATH);
 	if(!ret)
 		misc_set_bit(&recorder_config.status, CONFIG_RECORDER_PROFILE,1);
 	else
