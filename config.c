@@ -325,6 +325,26 @@ static int server_message_proc(void)
 	return ret;
 }
 
+static int heart_beat_proc(void)
+{
+	int ret = 0;
+	message_t msg;
+	long long int tick = 0;
+	tick = time_get_now_stamp();
+	if( (tick - info.tick) > 10 ) {
+		info.tick = tick;
+	    /********message body********/
+		msg_init(&msg);
+		msg.message = MSG_MANAGER_HEARTBEAT;
+		msg.sender = msg.receiver = SERVER_CONFIG;
+		msg.arg_in.cat = info.status;
+		msg.arg_in.dog = info.thread_start;
+		ret = manager_message(&msg);
+		/***************************/
+	}
+	return ret;
+}
+
 /*
  * State Machine
  */
@@ -434,6 +454,7 @@ static void *server_func(void)
 			server_error();
 			break;
 		}
+		heart_beat_proc();
 	}
 	server_release();
 	log_info("-----------thread exit: server_config-----------");

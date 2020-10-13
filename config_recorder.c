@@ -28,7 +28,13 @@ static pthread_rwlock_t			lock;
 static int						dirty;
 static recorder_config_t		recorder_config;
 static config_map_t recorder_config_profile_map[] = {
-	{"enable",     			&(recorder_config.profile.enable),      				cfg_u32, 	0,0,0,1,  	},
+	{"enable",     				&(recorder_config.profile.enable),      				cfg_u32, 	0,0,0,1,  	},
+	{"normal_start",      		&(recorder_config.profile.normal_start),       			cfg_string, "0",0,0,32,},
+	{"normal_end",      		&(recorder_config.profile.normal_end),   				cfg_string, "0",0,0,32,},
+	{"normal_repeat",     		&(recorder_config.profile.normal_repeat),      			cfg_u32, 	0,0,0,1,  	},
+	{"normal_repeat_interval",  &(recorder_config.profile.normal_repeat_interval),      cfg_u32, 	0,0,0,1000000,  	},
+	{"normal_audio",     		&(recorder_config.profile.normal_audio),      			cfg_u32, 	0,0,0,1,  	},
+	{"normal_quality",     		&(recorder_config.profile.normal_quality),      		cfg_u32, 	0,0,0,2,  	},
 	{"low_bitrate",     	&(recorder_config.profile.quality[0].bitrate),      	cfg_u32, 	512,0,0,10000,  	},
 	{"low_audio_sample",	&(recorder_config.profile.quality[0].audio_sample),		cfg_u32, 	8,0,0,1000000,},
 	{"medium_bitrate",     	&(recorder_config.profile.quality[1].bitrate),      	cfg_u32, 	1024,0,0,10000,  	},

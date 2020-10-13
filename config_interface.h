@@ -16,7 +16,7 @@
 /*
  * define
  */
-#define		SERVER_CONFIG_VERSION_STRING			"alpha-3.1"
+#define		SERVER_CONFIG_VERSION_STRING			"alpha-3.3"
 
 #define		MSG_CONFIG_BASE						(SERVER_CONFIG<<16)
 #define		MSG_CONFIG_SIGINT					MSG_CONFIG_BASE | 0x0000

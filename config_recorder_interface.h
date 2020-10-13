@@ -29,6 +29,12 @@ typedef struct recorder_quality_t {
 
 typedef struct recorder_profile_config_t {
 	unsigned int	enable;
+	char				normal_start[MAX_SYSTEM_STRING_SIZE];
+	char				normal_end[MAX_SYSTEM_STRING_SIZE];
+	int					normal_repeat;
+	int					normal_repeat_interval;
+	int					normal_audio;
+	int					normal_quality;
 	recorder_quality_t	quality[3];
 	unsigned int	max_length;		//in seconds
 	unsigned int	min_length;
